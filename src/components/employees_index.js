@@ -34,12 +34,9 @@ class EmployeesIndex extends Component {
           <td>{employee.first}</td>
           <td>{employee.last}</td>
           <td>
-            <button
-              type="button"
-              onClick={this.onDeleteClick.bind(this, employee.key)}
-              className="btn btn-default">
-              Remove
-            </button>
+            <span onClick={this.onDeleteClick.bind(this, employee.key)}>
+              <i className="fa fa-trash-o"></i>
+            </span>
           </td>
         </tr>
       );
