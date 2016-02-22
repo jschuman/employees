@@ -1,10 +1,14 @@
-import React from 'react';
-import { Component } from 'react';
+import React, { Component } from 'react';
+import Employees from './employees';
+import EmployeeEntry from './employee_entry';
 
 export default class App extends Component {
   render() {
     return (
-      <div>React simple starter</div>
+      <div>
+        <Employees />
+        <EmployeeEntry />
+      </div>
     );
   }
 }
