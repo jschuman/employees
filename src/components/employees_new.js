@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class Employees extends Component {
+import { createEmployee, fetchEmployees } from '../actions/index';
+
+class EmployeesNew extends Component {
   constructor(props){
     super(props);
 
@@ -13,13 +16,12 @@ export default class Employees extends Component {
 
   onFormSubmit(e){
     e.preventDefault();
-    this.firebaseRef = new Firebase("https://solstreet-employees.firebaseio.com/employees/");
-    this.firebaseRef.push({
-      first: this.state.first,
-      last: this.state.last
-    });
+    this.props.createEmployee({first: this.state.first, last: this.state.last})
+      .then(() => {
+        this.setState({first: '', last: ''});
+        this.props.fetchEmployees();
+      })
 
-    this.setState({first: '', last: ''});
   }
 
   onFirstInputChange(event){
@@ -50,3 +52,5 @@ export default class Employees extends Component {
     );
   }
 }
+
+export default connect(null, { createEmployee, fetchEmployees })(EmployeesNew);
