@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import { fetchEmployees, deleteEmployee } from '../actions/index';
 
@@ -60,6 +61,9 @@ class EmployeesIndex extends Component {
             {this.renderEmployeeList()}
           </tbody>
         </table>
+        <Link to='/employees/new'>
+          Add Employee...
+        </Link>
       </div>
     );
   }

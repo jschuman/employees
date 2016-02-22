@@ -1,25 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { createEmployee, fetchEmployees } from '../actions/index';
+import { createEmployee } from '../actions/index';
 
 class EmployeesNew extends Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
   constructor(props){
     super(props);
-
     this.state = { first: '', last: ''};
+  }
 
-    this.onFormSubmit = this.onFormSubmit.bind(this);
-    this.onFirstInputChange = this.onFirstInputChange.bind(this);
-    this.onLastInputChange = this.onLastInputChange.bind(this);
+  onCancel(e){
+    e.preventDefault();
+    this.context.router.push('/');
   }
 
   onFormSubmit(e){
     e.preventDefault();
     this.props.createEmployee({first: this.state.first, last: this.state.last})
       .then(() => {
-        this.setState({first: '', last: ''});
-        this.props.fetchEmployees();
+        //employee has been created, navigate to index
+        this.context.router.push('/');
       })
 
   }
@@ -35,22 +39,23 @@ class EmployeesNew extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={this.onFormSubmit}>
+        <form onSubmit={this.onFormSubmit.bind(this)}>
           <input
             type='text'
             value={this.state.first}
-            onChange={this.onFirstInputChange}
+            onChange={this.onFirstInputChange.bind(this)}
           />
           <input
             type='text'
             value={this.state.last}
-            onChange={this.onLastInputChange}
+            onChange={this.onLastInputChange.bind(this)}
           />
           <button className='btn' type='submit'>Add</button>
+          <button className='btn' type='button' onClick={this.onCancel.bind(this)}>Cancel</button>
         </form>
       </div>
     );
   }
 }
 
-export default connect(null, { createEmployee, fetchEmployees })(EmployeesNew);
+export default connect(null, { createEmployee })(EmployeesNew);
