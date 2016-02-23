@@ -67,17 +67,18 @@ class EmployeesIndex extends Component {
     return (
       <div>
         <h1>Employees</h1>
+        <div style={{marginTop: '20px'}}>
+          <Griddle
+            results={this.props.employees}
+            columns={['first', 'birthday', 'deleteLink']}
+            showFilter={true}
+            columnMetadata={columnMeta}
+          />
 
-        <Griddle
-          results={this.props.employees}
-          columns={['first', 'birthday', 'deleteLink']}
-          showFilter={true}
-          columnMetadata={columnMeta}
-        />
-
-        <Link to='/employees/new'>
-          Add Employee...
-        </Link>
+          <Link to='/employees/new'>
+            Add Employee...
+          </Link>
+        </div>
       </div>
     );
   }

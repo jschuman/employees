@@ -35,38 +35,43 @@ class EmployeesDetail extends Component {
   }
 
   formGroupClassName(field){
-    return `form-group ${field.touched && field.invalid ? 'has-danger' : ''}`;
+    return `form-group row ${field.touched && field.invalid ? 'has-danger' : ''}`;
+  }
+
+  renderFormField(field, label, inputAttrs={}){
+    return (
+      <div style={{marginTop: '20px'}} className={this.formGroupClassName(field)}>
+        <label className="col-sm-2 form-control-label">{label}</label>
+        <div className="col-sm-6">
+          <input
+            type="text"
+            className="form-control"
+            {...inputAttrs}
+            {...field}
+          />
+          <div className="text-help">
+            {field.touched ? field.error : ''}
+          </div>
+        </div>
+      </div>
+    )
   }
 
   render() {
-    const { fields: { first, last, birthday }, handleSubmit } = this.props;
+    const { fields: { first, last, address1, address2, city, state, zip, birthday }
+            , handleSubmit } = this.props;
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
         {this.renderTitle()}
-        <div className={this.formGroupClassName(first)}>
-          <label>First</label>
-          <input type="text" className="form-control" autoFocus {...first} />
-          <div className="text-help">
-            {first.touched ? first.error : ''}
-          </div>
-        </div>
-
-        <div className={this.formGroupClassName(last)}>
-          <label>Last</label>
-          <input type="text" className="form-control" {...last} />
-          <div className="text-help">
-            {last.touched ? last.error : ''}
-          </div>
-        </div>
-
-        <div className={this.formGroupClassName(birthday)}>
-          <label>Birthday (mm/dd/yyy)</label>
-          <input type="text" className="form-control" {...birthday} />
-          <div className="text-help">
-            {birthday.touched ? birthday.error : ''}
-          </div>
-        </div>
+        {this.renderFormField(first, 'First', {autoFocus: true})}
+        {this.renderFormField(last, 'Last')}
+        {this.renderFormField(address1, 'Address 1')}
+        {this.renderFormField(address2, 'Address 2')}
+        {this.renderFormField(city, 'City')}
+        {this.renderFormField(state, 'State')}
+        {this.renderFormField(zip, 'Zip Code')}
+        {this.renderFormField(birthday, 'Birthday', {placeholder: 'MM/DD/YYYY'})}
 
         <button type='submit' className="btn btn-primary">Submit</button>
         <Link to="/employees" className="btn btn-danger">Cancel</Link>
@@ -104,6 +109,6 @@ function mapStateToProps(state, ownProps){
 
 export default reduxForm({
   form: 'EmployeesDetailForm',
-  fields: ['first', 'last', 'birthday'],
+  fields: ['first', 'last', 'address1', 'address2', 'city', 'state', 'zip', 'birthday'],
   validate
 }, mapStateToProps, { createEmployee, updateEmployee })(EmployeesDetail);
