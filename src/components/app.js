@@ -6,7 +6,7 @@ export default class App extends Component {
     return (
       <div>
         <Link to="/">
-          <img style={{marginBottom: '20px'}} src='/images/ss-logo.png' />
+          <img style={{marginBottom: '15px'}} src='/images/ss-logo.png' />
         </Link>
         {this.props.children}
       </div>

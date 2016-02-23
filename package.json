@@ -1,9 +1,9 @@
 {
-  "name": "employees",
+  "name": "hr-portal",
   "version": "1.0.0",
-  "description": "Employee Management",
+  "description": "HR Portal",
   "main": "index.js",
-  "repository": "git@github.com:jschuman/employees.git",
+  "repository": "git@github.com:jschuman/hr-portal.git",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js"
   },
