@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { reduxForm } from 'redux-form';
+import moment from 'moment';
 
 import { createEmployee, updateEmployee } from '../actions/index';
 
@@ -14,14 +15,14 @@ class EmployeesDetail extends Component {
       this.props.createEmployee(props)
         .then(() => {
           //employee has been created, navigate to index
-          this.context.router.push('/');
+          this.context.router.push('/employees');
         })
     } else if (this.props.mode === 'update'){
       props.key = this.props.employeeKey;
       this.props.updateEmployee(props)
         .then(() => {
           //employee has been updated, navigate to index
-          this.context.router.push('/');
+          this.context.router.push('/employees');
         })
     }
 
@@ -68,7 +69,7 @@ class EmployeesDetail extends Component {
         </div>
 
         <button type='submit' className="btn btn-primary">Submit</button>
-        <Link to="/" className="btn btn-danger">Cancel</Link>
+        <Link to="/employees" className="btn btn-danger">Cancel</Link>
       </form>
     );
   }
@@ -85,7 +86,12 @@ function validate(values){
     errors.last = 'Enter a last name';
   }
 
-  if (!values.birthday) {
+  if (values.birthday) {
+    //verify valid date
+    if (!moment(values.birthday, "MM/DD/YYYY", true).isValid()){
+      errors.birthday = 'Enter a valid date for birthday';
+    }
+  } else {
     errors.birthday = 'Enter a birthday';
   }
 
