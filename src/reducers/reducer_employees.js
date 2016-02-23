@@ -1,6 +1,6 @@
-import { FETCH_EMPLOYEES, CREATE_EMPLOYEE, DELETE_EMPLOYEE } from '../actions/index';
+import { FETCH_EMPLOYEES, FETCH_EMPLOYEE } from '../actions/index';
 
-const INITIAL_STATE = { all: [] };
+const INITIAL_STATE = { all: [], employee: null };
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -13,10 +13,8 @@ export default function(state = INITIAL_STATE, action) {
         employees.push(employee);
       });
       return { ...state, all: employees };
-    case CREATE_EMPLOYEE:
-      return state;
-    case DELETE_EMPLOYEE:
-      return state;
+    case FETCH_EMPLOYEE:
+      return { ...state, employee: action.payload.data };
     default:
       return state;
   }

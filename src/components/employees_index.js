@@ -1,14 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { fetchEmployees, deleteEmployee } from '../actions/index';
+import { fetchEmployees, deleteEmployee, sortEmployees } from '../actions/index';
 
 class EmployeesIndex extends Component {
+  static contextTypes = {
+    router: PropTypes.object
+  };
 
   constructor(props){
-      super(props)
-      this.props.fetchEmployees();
+    super(props)
+    this.props.fetchEmployees();
   }
 
   onDeleteClick(key, e) {
@@ -18,6 +21,23 @@ class EmployeesIndex extends Component {
         // or just re-fetchEmployees?
         this.props.fetchEmployees();
       });
+  }
+
+  onEmployeeClick(key, e) {
+    this.context.router.push(`/employees/${key}`);
+  }
+
+  onHeaderClick(key, e){
+    this.props.sortEmployees(key);
+  }
+
+  renderSortIcon(sortKey){
+    if (this.props.employees.length > 0 && this.props.sort.key === sortKey){
+      let iconName = this.props.sort.order === 'asc' ? 'fa-sort-asc' : 'fa-sort-desc';
+      return <i className={`fa ${iconName}`}></i>;
+    } else {
+      return '';
+    }
   }
 
   renderEmployeeList(){
@@ -31,8 +51,11 @@ class EmployeesIndex extends Component {
     return this.props.employees.map((employee) => {
       return (
         <tr key={employee.key}>
-          <td>{employee.first}</td>
-          <td>{employee.last}</td>
+          <td
+            className='employeeListItem'
+            onClick={this.onEmployeeClick.bind(this, employee.key)}>
+            {employee.last + ', ' + employee.first}
+          </td>
           <td>
             <span onClick={this.onDeleteClick.bind(this, employee.key)}>
               <i className="fa fa-trash-o"></i>
@@ -50,8 +73,12 @@ class EmployeesIndex extends Component {
         <table className="table table-hover">
           <thead>
             <tr>
-              <th>First</th>
-              <th>Last</th>
+              <th
+                className='sort-header'
+                onClick={this.onHeaderClick.bind(this, 'name')}>
+                Name
+                {this.renderSortIcon('name')}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -66,8 +93,23 @@ class EmployeesIndex extends Component {
   }
 }
 
-function mapStateToProps(state){
-  return { employees: state.employees.all };
+function mapStateToProps({ employees, sort }){
+  let sortedEmployees = employees.all.concat().sort(function(a,b){
+    let aSortKey = a[sort.key];
+    let bSortKey = b[sort.key];
+    if (sort.key === 'name'){
+      aSortKey = a.last + ', ' + a.first;
+      bSortKey = b.last + ', ' + b.first;
+    }
+    if (sort.order === 'asc'){
+      return aSortKey > bSortKey;
+    } else {
+      return aSortKey < bSortKey;
+    }
+  });
+  return {
+    employees: sortedEmployees,
+    sort: sort };
 }
 
-export default connect(mapStateToProps, { fetchEmployees, deleteEmployee })(EmployeesIndex);
+export default connect(mapStateToProps, { fetchEmployees, deleteEmployee, sortEmployees })(EmployeesIndex);
