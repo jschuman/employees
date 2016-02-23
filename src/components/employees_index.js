@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import Griddle from 'griddle-react';
 
-import { fetchEmployees, deleteEmployee, sortEmployees } from '../actions/index';
+import { fetchEmployees, deleteEmployee } from '../actions/index';
 
 class EmployeesIndex extends Component {
   static contextTypes = {
@@ -23,68 +24,57 @@ class EmployeesIndex extends Component {
       });
   }
 
-  onEmployeeClick(key, e) {
-    this.context.router.push(`/employees/${key}`);
-  }
-
-  onHeaderClick(key, e){
-    this.props.sortEmployees(key);
-  }
-
-  renderSortIcon(sortKey){
-    if (this.props.employees.length > 0 && this.props.sort.key === sortKey){
-      let iconName = this.props.sort.order === 'asc' ? 'fa-sort-asc' : 'fa-sort-desc';
-      return <i className={`fa ${iconName}`}></i>;
-    } else {
-      return '';
-    }
-  }
-
-  renderEmployeeList(){
-    if (this.props.employees.length === 0){
-      return (
-          <tr>
-            <td>Loading...</td>
-          </tr>
-        );
-    }
-    return this.props.employees.map((employee) => {
-      return (
-        <tr key={employee.key}>
-          <td
-            className='employeeListItem'
-            onClick={this.onEmployeeClick.bind(this, employee.key)}>
-            {employee.last + ', ' + employee.first}
-          </td>
-          <td>
-            <span onClick={this.onDeleteClick.bind(this, employee.key)}>
-              <i className="fa fa-trash-o"></i>
-            </span>
-          </td>
-        </tr>
-      );
-    });
-  }
-
   render() {
+    let LinkComponent = React.createClass({
+      render: function(){
+        let url = `employees/${this.props.rowData.key}`;
+        let displayName = `${this.props.rowData.first} ${this.props.rowData.last}`;
+        return <a href={url}>{displayName}</a>
+      }
+    });
+    let DeleteComponent = React.createClass({
+      render: function(){
+        let self = this.props.metadata.customComponentMetadata.self;
+        return (
+          <span onClick={self.onDeleteClick.bind(self, this.props.rowData.key)}>
+            <i className="fa fa-trash-o"></i>
+          </span>
+        )
+      }
+    });
+
+    let columnMeta = [
+      {
+        "columnName": "first",
+        "order": 1,
+        "displayName": "Employee Name",
+        "customComponent": LinkComponent
+      },
+      {
+        "columnName": "birthday",
+        "order": 2,
+        "displayName": "Birthday"
+      },
+      {
+        "columnName": "deleteLink",
+        "order": 3,
+        "displayName": "",
+        "customComponent": DeleteComponent,
+        "customComponentMetadata": {self: this}
+      }
+
+    ];
     return (
       <div>
         <h1>Employees</h1>
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th
-                className='sort-header'
-                onClick={this.onHeaderClick.bind(this, 'name')}>
-                Name
-                {this.renderSortIcon('name')}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderEmployeeList()}
-          </tbody>
-        </table>
+
+        <Griddle
+          results={this.props.employees}
+          columns={['first', 'birthday', 'deleteLink']}
+          showFilter={true}
+          columnMetadata={columnMeta}
+        />
+
         <Link to='/employees/new'>
           Add Employee...
         </Link>
@@ -93,23 +83,8 @@ class EmployeesIndex extends Component {
   }
 }
 
-function mapStateToProps({ employees, sort }){
-  let sortedEmployees = employees.all.concat().sort(function(a,b){
-    let aSortKey = a[sort.key];
-    let bSortKey = b[sort.key];
-    if (sort.key === 'name'){
-      aSortKey = a.last + ', ' + a.first;
-      bSortKey = b.last + ', ' + b.first;
-    }
-    if (sort.order === 'asc'){
-      return aSortKey > bSortKey;
-    } else {
-      return aSortKey < bSortKey;
-    }
-  });
-  return {
-    employees: sortedEmployees,
-    sort: sort };
+function mapStateToProps({ employees }){
+  return { employees: employees.all };
 }
 
-export default connect(mapStateToProps, { fetchEmployees, deleteEmployee, sortEmployees })(EmployeesIndex);
+export default connect(mapStateToProps, { fetchEmployees, deleteEmployee })(EmployeesIndex);

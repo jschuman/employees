@@ -45,7 +45,7 @@ class EmployeesDetail extends Component {
         {this.renderTitle()}
         <div className={this.formGroupClassName(first)}>
           <label>First</label>
-          <input type="text" className="form-control" {...first} />
+          <input type="text" className="form-control" autoFocus {...first} />
           <div className="text-help">
             {first.touched ? first.error : ''}
           </div>

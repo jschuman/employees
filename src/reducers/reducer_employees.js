@@ -7,11 +7,13 @@ export default function(state = INITIAL_STATE, action) {
     case FETCH_EMPLOYEES:
       //convert to array
       let employees = [];
-      Object.keys(action.payload.data).map((key) => {
-        let employee = action.payload.data[key];
-        employee.key = key;
-        employees.push(employee);
-      });
+      if (action.payload.data){
+        Object.keys(action.payload.data).map((key) => {
+          let employee = action.payload.data[key];
+          employee.key = key;
+          employees.push(employee);
+        });
+      }
       return { ...state, all: employees };
     case FETCH_EMPLOYEE:
       return { ...state, employee: action.payload.data };

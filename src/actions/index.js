@@ -5,7 +5,6 @@ export const CREATE_EMPLOYEE = 'CREATE_EMPLOYEE';
 export const UPDATE_EMPLOYEE = 'UPDATE_EMPLOYEE';
 export const DELETE_EMPLOYEE = 'DELETE_EMPLOYEE';
 export const FETCH_EMPLOYEE = 'FETCH_EMPLOYEE';
-export const SORT_EMPLOYEES = 'FETCH_EMPLOYEE';
 
 
 const ROOT_URL = 'https://solstreet-employees.firebaseio.com/';
@@ -53,11 +52,4 @@ export function deleteEmployee(key) {
     type: DELETE_EMPLOYEE,
     payload: request
   };
-}
-
-export function sortEmployees(key){
-  return {
-    type: SORT_EMPLOYEES,
-    payload: key
-  }
 }

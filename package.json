@@ -21,6 +21,7 @@
     "axios": "^0.9.1",
     "babel-preset-stage-1": "^6.1.18",
     "firebase": "^2.4.1",
+    "griddle-react": "^0.3.1",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
@@ -28,6 +29,7 @@
     "react-router": "^2.0.0",
     "redux": "^3.0.4",
     "redux-form": "^4.2.0",
-    "redux-promise": "^0.5.1"
+    "redux-promise": "^0.5.1",
+    "underscore": "^1.8.3"
   }
 }

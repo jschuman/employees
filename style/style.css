@@ -7,10 +7,6 @@ i {
   margin-left: 5px;
 }
 
-th.sort-header {
-  cursor: pointer;
-}
-
 td.employeeListItem {
   cursor: pointer;
 }
