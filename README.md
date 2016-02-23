@@ -1,5 +1,5 @@
-# employees
-Employee Management App
+# hr-portal
+HR Portal
 
 To get going:
 ```
