@@ -58,7 +58,7 @@ class EmployeesDetail extends Component {
   }
 
   render() {
-    const { fields: { first, last, address1, address2, city, state, zip, birthday }
+    const { fields: { first, last, address1, address2, city, state, zip, hire_date, birthday }
             , handleSubmit } = this.props;
 
     return (
@@ -71,6 +71,7 @@ class EmployeesDetail extends Component {
         {this.renderFormField(city, 'City')}
         {this.renderFormField(state, 'State')}
         {this.renderFormField(zip, 'Zip Code')}
+        {this.renderFormField(hire_date, 'Hire Date', {placeholder: 'MM/DD/YYYY'})}
         {this.renderFormField(birthday, 'Birthday', {placeholder: 'MM/DD/YYYY'})}
 
         <button type='submit' className="btn btn-primary">Submit</button>
@@ -100,6 +101,15 @@ function validate(values){
     errors.birthday = 'Enter a birthday';
   }
 
+  if (values.hire_date) {
+    //verify valid date
+    if (!moment(values.hire_date, "MM/DD/YYYY", true).isValid()){
+      errors.hire_date = 'Enter a valid date for hire_date';
+    }
+  } else {
+    errors.hire_date = 'Enter a hire_date';
+  }
+
   return errors;
 }
 
@@ -109,6 +119,6 @@ function mapStateToProps(state, ownProps){
 
 export default reduxForm({
   form: 'EmployeesDetailForm',
-  fields: ['first', 'last', 'address1', 'address2', 'city', 'state', 'zip', 'birthday'],
+  fields: ['first', 'last', 'address1', 'address2', 'city', 'state', 'zip', 'hire_date', 'birthday'],
   validate
 }, mapStateToProps, { createEmployee, updateEmployee })(EmployeesDetail);

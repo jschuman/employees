@@ -9,6 +9,7 @@ const rootReducer = combineReducers({
   employees: EmployeesReducer,
   form: formReducer.normalize({
     EmployeesDetailForm: {
+      hire_date: normalizeDate,
       birthday: normalizeDate,
       zip: normalizeZip
     }
