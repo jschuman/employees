@@ -30,7 +30,7 @@ class EmployeesDetail extends Component {
 
   renderTitle(){
     return (
-      <h3>{this.props.mode === 'create' ? 'Create' : 'Update'} an Employee</h3>
+      <h3>{this.props.mode === 'create' ? 'Create' : 'Update'} Employee</h3>
     );
   }
 
@@ -38,9 +38,9 @@ class EmployeesDetail extends Component {
     return `form-group row ${field.touched && field.invalid ? 'has-danger' : ''}`;
   }
 
-  renderFormField(field, label, inputAttrs={}){
+  renderFormInputField(field, label, inputAttrs={}){
     return (
-      <div style={{marginTop: '20px'}} className={this.formGroupClassName(field)}>
+      <div className={this.formGroupClassName(field)}>
         <label className="col-sm-2 form-control-label">{label}</label>
         <div className="col-sm-6">
           <input
@@ -58,25 +58,49 @@ class EmployeesDetail extends Component {
   }
 
   render() {
-    const { fields: { first, last, address1, address2, city, state, zip, hire_date, birthday }
+    const { fields: { first, last, address1, address2, city, state, zip,
+                      hire_date, status, subcontractor, birthday }
             , handleSubmit } = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <div>
+        <Link to="/employees">Back to Employee Management</Link>
         {this.renderTitle()}
-        {this.renderFormField(first, 'First', {autoFocus: true})}
-        {this.renderFormField(last, 'Last')}
-        {this.renderFormField(address1, 'Address 1')}
-        {this.renderFormField(address2, 'Address 2')}
-        {this.renderFormField(city, 'City')}
-        {this.renderFormField(state, 'State')}
-        {this.renderFormField(zip, 'Zip Code')}
-        {this.renderFormField(hire_date, 'Hire Date', {placeholder: 'MM/DD/YYYY'})}
-        {this.renderFormField(birthday, 'Birthday', {placeholder: 'MM/DD/YYYY'})}
+        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 
-        <button type='submit' className="btn btn-primary">Submit</button>
-        <Link to="/employees" className="btn btn-danger">Cancel</Link>
-      </form>
+          {this.renderFormInputField(first, 'First', {autoFocus: true})}
+          {this.renderFormInputField(last, 'Last')}
+          {this.renderFormInputField(address1, 'Address 1')}
+          {this.renderFormInputField(address2, 'Address 2')}
+          {this.renderFormInputField(city, 'City')}
+          {this.renderFormInputField(state, 'State')}
+          {this.renderFormInputField(zip, 'Zip Code')}
+          {this.renderFormInputField(hire_date, 'Hire Date', {placeholder: 'MM/DD/YYYY'})}
+          <div className='form-group row'>
+            <label className='col-sm-2 form-control-label'>Status</label>
+            <div className='col-sm-2'>
+              <select
+                {...status}
+                value={status.value || ''}  // required syntax for reset form to work
+                                            // undefined will not change value to first empty option
+                                            // when resetting
+                >
+                <option></option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                <option value="terminated">Terminated</option>
+              </select>
+            </div>
+            <label className='col-sm-4 form-control-label'>
+              <input type="checkbox" {...subcontractor}/> Subcontractor
+            </label>
+          </div>
+          {this.renderFormInputField(birthday, 'Birthday', {placeholder: 'MM/DD/YYYY'})}
+
+          <button type='submit' className="btn btn-primary">Submit</button>
+          <Link to="/employees" className="btn btn-danger">Cancel</Link>
+        </form>
+      </div>
     );
   }
 }
@@ -119,6 +143,7 @@ function mapStateToProps(state, ownProps){
 
 export default reduxForm({
   form: 'EmployeesDetailForm',
-  fields: ['first', 'last', 'address1', 'address2', 'city', 'state', 'zip', 'hire_date', 'birthday'],
+  fields: ['first', 'last', 'address1', 'address2', 'city', 'state', 'zip',
+           'hire_date', 'status', 'subcontractor', 'birthday'],
   validate
 }, mapStateToProps, { createEmployee, updateEmployee })(EmployeesDetail);

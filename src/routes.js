@@ -3,9 +3,9 @@ import { Route, IndexRoute } from 'react-router';
 
 import App from './components/app';
 import Portal from './components/portal';
-import EmployeesIndex from './components/employees_index';
+import EmployeesIndex from './containers/employees_index';
 import EmployeesNew from './components/employees_new';
-import EmployeesShow from './components/employees_show';
+import EmployeesShow from './containers/employees_show';
 
 export default (
   <Route path="/" component={App} >

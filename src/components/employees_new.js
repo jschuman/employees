@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import EmployeesDetail from './employees_detail';
+import EmployeesDetail from '../containers/employees_detail';
 
 export default class EmployeesNew extends Component {
 
